@@ -35,6 +35,7 @@ parser.add_argument('-y', action="store", dest="ymax", type=int, default=300.0,
 parser.add_argument('-s', action="store", dest="scale", type=int, default=1.0,
                     help='speed scale')
 options = parser.parse_args()
+options = parser.parse_args()
 
 vel_x = []
 vel_y = []
@@ -48,10 +49,16 @@ def setup(options,time,r):
     
     #part_to_init = options.npart #int(round(xmax*ymax/3000.0))
     particles = initParticles(options.npart,r,options.xmax,options.ymax)
-    if options.npart==1:
-        particles[0].pos=np.array([options.xmax/2,options.ymax/2])
-    for i in particles:
-        i.vel*=options.scale
+    particles[0].pos=np.array([options.xmax/2,options.ymax/2])
+    particles[0].vel*=options.scale
+    #p=Particle(options.xmax/2,options.ymax/2,r)
+    #p.mass=10000000000.
+    for theta in np.arange(0,2*np.pi,np.pi/20.):
+        p=Particle(options.xmax/2+130*np.sin(theta)-3,-3+options.ymax/2+130*np.cos(theta),r)
+        p.vel=np.array([0,0])
+        p.mass=float('inf')
+        p.radius=7
+        particles.append(p)
     return particles
 
 def simulate(options, particles, time):
@@ -92,6 +99,8 @@ def simulate(options, particles, time):
         particles = advanceParticles(particles, dt_col)
         firstEvent = coll_list[0]
         particles = highlightEventParticles(firstEvent,particles)
+        vel_x.append(particles[0].vel[0])
+        vel_y.append(particles[0].vel[1])
         particles = performCollision(firstEvent,particles)
         time +=  dt_col
         
@@ -273,10 +282,6 @@ def performCollision(event,particles):
                     particles[event.p2_index])
         particles[event.p1_index].apply_impulse(J[0],J[1])
         particles[event.p2_index].apply_impulse(-J[0],-J[1])
-        vel_x.append(particles[event.p2_index].vel[0])
-        vel_y.append(particles[event.p2_index].vel[1])
-    vel_x.append(particles[event.p1_index].vel[0])
-    vel_y.append(particles[event.p1_index].vel[1])
     return particles
         
 def impulse(Part1,Part2):
@@ -350,7 +355,6 @@ def main(options):
     r = 7             # particle radius to use
     time = 0.0        # global simulation time
     paused_log = True # paused indicator bool
-    global vel_x,vel_y
 
     # set-up the screen
     import matplotlib.pyplot as plt
@@ -383,15 +387,10 @@ def main(options):
         count+=1
         if count>600:
             count=0
-            #plot velocities
             plt.scatter(vel_x, vel_y,marker='.')
             plt.show()
-            #plot angles
             s=np.arctan(np.array(vel_x)/np.array(vel_y))
-            plt.hist(s, 20, density=True, facecolor='g', alpha=0.75)
-            plt.show()
-            #plot histograms of velocities
-            plt.hist(vel_x+vel_y, 20, density=True, facecolor='g', alpha=0.75)
+            plt.hist(s, 50, density=True, facecolor='g', alpha=0.75)
             plt.show()
         if not paused_log:
             particles, time = simulate_dt(options, particles, time)
@@ -403,8 +402,6 @@ def main(options):
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
                 quit_log = True
             elif event.type == MOUSEBUTTONDOWN:
-                vel_x=[]
-                vel_y=[]
                 paused_log = not paused_log
             elif event.type == MOUSEBUTTONUP:
                 # fist.unpunch()

@@ -60,15 +60,15 @@ class Particle(pygame.sprite.Sprite):
         dt. Constant acceleration is assumed for the moment '''
         
         self.update_acc(dt)
-	self.update_pos(dt)
-	self.update_vel(dt)
+        self.update_pos(dt)
+        self.update_vel(dt)
         self.unhighlight()
          
 
     def highlight(self):
         
-	# Highlight the particle red.
-	self.image = self.alt_image
+        # Highlight the particle red.
+        self.image = self.alt_image
 
     def unhighlight(self):
 
@@ -78,38 +78,38 @@ class Particle(pygame.sprite.Sprite):
     def update_acc(self,dt):
 
         ''' Update acceleration term. Constant acceleration for now so
-	no change.  '''
+        no change.  '''
         
-	self.acc_old = self.acc
-	self.acc = self.acc
+        self.acc_old = self.acc
+        self.acc = self.acc
     
 
     def update_pos(self,dt):
 
         ''' Update the particle position according to a time-step of
-	size dt.  '''
+        size dt.  '''
         
-	pos_1 = self.pos
-	pos_1 += dt*self.vel
-	pos_2 = self.acc*0.5*(dt**2.0)
-	self.pos = pos_1 + pos_2
+        pos_1 = self.pos
+        pos_1 += dt*self.vel
+        pos_2 = self.acc*0.5*(dt**2.0)
+        self.pos = pos_1 + pos_2
 
     
 
     def update_vel(self,dt):
 
         ''' Update the velocity according to and its accelerate over
-	time interval dt.  '''
-	
-	v_1 = self.vel
-	a_sum = self.acc + self.acc
-	v_2 = a_sum*0.5*dt
-	self.vel = v_1 + v_2
+        time interval dt.  '''
+        
+        v_1 = self.vel
+        a_sum = self.acc + self.acc
+        v_2 = a_sum*0.5*dt
+        self.vel = v_1 + v_2
     
 
     def reflect_side(self):
-	#Invert the x velocity component
-	self.vel[0] = - self.vel[0]
+        #Invert the x velocity component
+        self.vel[0] = - self.vel[0]
     
 
     def reflect_top(self):
@@ -119,34 +119,34 @@ class Particle(pygame.sprite.Sprite):
 
     def apply_boundary_cond(self):
 
-	'''Update the particle position to simulate periodic boundary
-	   conditions with box bounds (0,xmax), (0,ymax)'''
-	
-	if (self.pos[0] >= xmax):
-	    self.pos[0] = self.pos[0] - xmax
+        '''Update the particle position to simulate periodic boundary
+           conditions with box bounds (0,xmax), (0,ymax)'''
+        
+        if (self.pos[0] >= xmax):
+            self.pos[0] = self.pos[0] - xmax
             
-	if (self.pos[0] < 0):
-	    self.pos[0] = self.pos[0] + xmax
+        if (self.pos[0] < 0):
+            self.pos[0] = self.pos[0] + xmax
 
-	if (self.pos[1] >= ymax):
-	    self.pos[1] = self.pos[1] - ymax
-	
-	if (self.pos[1] < 0):
-	    self.pos[1] = self.pos[1] + ymax
-	
+        if (self.pos[1] >= ymax):
+            self.pos[1] = self.pos[1] - ymax
+        
+        if (self.pos[1] < 0):
+            self.pos[1] = self.pos[1] + ymax
+        
 
     def apply_impulse(self,Jx,Jy):
 
-	''' Compute and apply velocity change due to an impulse
-	   applied to the particle.
-	   
-	   args:
-	   Jx - scalar x-component of the impulse vector
-	   Jy - scalar y-component of the impulse vector 
-	'''
-	
-	self.vel[0] = self.vel[0] + (Jx/self.mass)
-	self.vel[1] = self.vel[1] + (Jy/self.mass)
+        ''' Compute and apply velocity change due to an impulse
+           applied to the particle.
+           
+           args:
+           Jx - scalar x-component of the impulse vector
+           Jy - scalar y-component of the impulse vector 
+        '''
+        
+        self.vel[0] = self.vel[0] + (Jx/self.mass)
+        self.vel[1] = self.vel[1] + (Jy/self.mass)
 
 
 # define the image loader
@@ -158,12 +158,12 @@ def load_image(name, colorkey=None):
     try:
         image = pygame.image.load(fullname)
     except pygame.error:
-        print 'Cannot load image:', fullname
+        print ('Cannot load image:', fullname)
         raise SystemExit(str(geterror()))
     
     image = image.convert()
     if colorkey is not None:
-        if colorkey is -1:
+        if colorkey == -1:
             colorkey = image.get_at((0,0))
         image.set_colorkey(colorkey, RLEACCEL)
         

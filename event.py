@@ -32,9 +32,9 @@ class Event(object):
         
         # Set event attributes based on the collision type
         if (ct=="w"):
-	    self.wc_log = True
+            self.wc_log = True
         else:
-	    # Warn if second particle index was not passed
-	    if (p2_index == None):
-	        raise RuntimeWarning("Warning: Event: second particle index undefined")
+            # Warn if second particle index was not passed
+            if (p2_index == None):
+                raise RuntimeWarning("Warning: Event: second particle index undefined")
 
