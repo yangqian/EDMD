@@ -8,7 +8,7 @@ This is a Pythonic version of the JavaScript EDMD code that I authored for the [
 ![edmd example image](https://user-images.githubusercontent.com/17439476/33520943-7bb99ff8-d7bc-11e7-9cd6-9e676f3a297d.png)
 
 ## Dependencies
-- Python 2.*
+- Python 3.*
 - [Pygame](https://www.pygame.org/wiki/GettingStarted) (Graphics)
 - [Numpy](http://www.numpy.org/)
 
@@ -17,6 +17,15 @@ Default conditions
 ```shell
 ./md.py
 ```
+single particle and many sphere with infinite mass
+```shell
+python3 md_single.py -n 1
+```
+multiply the speeds with a 100 factor
+```shell
+python3 md.py -n 10 -s 100
+```
+
 Simulate 60 particles within a 500 x 500px simulation box and a maximum time step of size 10.0
 ```shell
 ./md.py -n 60 -x 500 -y 500 --dt 10.0

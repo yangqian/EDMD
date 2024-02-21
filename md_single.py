@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # md.py - An Event Driven Molecular Dynamics (EDMD) Simulator
 #
 # This script performs a simple, event-drive molecular dynamics
